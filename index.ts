@@ -27,6 +27,12 @@ const connection = mysql.createConnection({
 connection.connect((err) => {
     if (err) throw err;
     console.log("Connected!");
+    /** Agrego esto acá porque en algunos casos no me dejaba terminar el proceso con Ctrl-C */
+    process.on('SIGINT', function() { 
+        console.log( "\nGracefully shutting down from SIGINT (Ctrl-C)" );
+        // some other closing procedures go here
+        process.exit(1);
+      });
 })
 
 server.app.use(cors());
