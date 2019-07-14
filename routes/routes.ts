@@ -7,6 +7,7 @@ const apiCtrl: ApiController = new ApiController();
 
 routes.route('/').get(apiCtrl.index);
 routes.route('/home').get(apiCtrl.home);
+routes.route('/timeForvehicle').get(apiCtrl.timeForvehicle.bind(apiCtrl));
 
 // Login
 /* userRoutes.post('/login', (req: Request, res: Response ) => {

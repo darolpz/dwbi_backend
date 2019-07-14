@@ -5,7 +5,9 @@ import mysql from 'mysql';
 import cors from 'cors';
 
 const server = new Server();
+const DBC = require( './dbconfig');
 
+console.log(DBC.dbconfig.host);
 
 // Body parser
 server.app.use(bodyParser.urlencoded({ extended: true }));
@@ -15,10 +17,10 @@ server.app.use(bodyParser.json());
 server.app.use('/', routes);
 
 const connection = mysql.createConnection({
-    host: "localhost",
-    user: "dwbi2019",
-    password: "dwbi",
-    database: "dwbi",
+    host: DBC.dbconfig.host,
+    user: DBC.dbconfig.user,
+    password: DBC.dbconfig.password,
+    database: DBC.dbconfig.database,
 });
 
 // Conectar DB
