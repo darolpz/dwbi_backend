@@ -16,8 +16,8 @@ server.app.use(body_parser_1.default.json());
 server.app.use('/', routes_1.default);
 const connection = mysql_1.default.createConnection({
     host: "localhost",
-    user: "daropl12",
-    password: "Biney12",
+    user: "dwbi2019",
+    password: "dwbi",
     database: "dwbi",
 });
 // Conectar DB

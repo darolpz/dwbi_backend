@@ -16,8 +16,8 @@ server.app.use('/', routes);
 
 const connection = mysql.createConnection({
     host: "localhost",
-    user: "daropl12",
-    password: "Biney12",
+    user: "dwbi2019",
+    password: "dwbi",
     database: "dwbi",
 });
 
