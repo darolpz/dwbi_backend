@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import connection from '..';
 
-const DBC = require( '../dbconfig');
+const DBC = require('../dbconfig');
 
 class ApiController {
     public index(req: Request, res: Response) {
@@ -25,10 +25,10 @@ class ApiController {
     }
 
     public async timeForvehicle(req: Request, res: Response) {
-        const query = 
+        const query =
             `SELECT v.Descipcion AS Vehiculo, AVG(MinutosViaje) AS Tiempo 
             FROM ${DBC.dbconfig.database}.CuboViajes cv 
-            INNER JOIN Datawarehouse.LK_Vehiculo v ON v.IdVehiculo = cv.IdVehiculo 
+            INNER JOIN ${DBC.dbconfig.database}.LK_Vehiculo v ON v.IdVehiculo = cv.IdVehiculo 
             GROUP BY v.Descipcion 
             HAVING AVG(MinutosViaje) > 0;`;
         const result = await this.select(query);

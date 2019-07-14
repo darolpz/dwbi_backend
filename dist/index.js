@@ -9,16 +9,18 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const mysql_1 = __importDefault(require("mysql"));
 const cors_1 = __importDefault(require("cors"));
 const server = new server_1.default();
+const DBC = require('./dbconfig');
+console.log(DBC.dbconfig.host);
 // Body parser
 server.app.use(body_parser_1.default.urlencoded({ extended: true }));
 server.app.use(body_parser_1.default.json());
 // Rutas de mi app
 server.app.use('/', routes_1.default);
 const connection = mysql_1.default.createConnection({
-    host: "localhost",
-    user: "dwbi2019",
-    password: "dwbi",
-    database: "dwbi",
+    host: DBC.dbconfig.host,
+    user: DBC.dbconfig.user,
+    password: DBC.dbconfig.password,
+    database: DBC.dbconfig.database,
 });
 // Conectar DB
 connection.connect((err) => {

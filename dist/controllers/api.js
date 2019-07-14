@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 const __1 = __importDefault(require(".."));
+const DBC = require('../dbconfig');
 class ApiController {
     index(req, res) {
         /* Post params */
@@ -34,10 +35,10 @@ class ApiController {
     timeForvehicle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = `SELECT v.Descipcion AS Vehiculo, AVG(MinutosViaje) AS Tiempo 
-        FROM Datawarehouse.CuboViajes cv 
-        INNER JOIN Datawarehouse.LK_Vehiculo v ON v.IdVehiculo = cv.IdVehiculo 
-        GROUP BY v.Descipcion 
-        HAVING AVG(MinutosViaje) > 0;`;
+            FROM ${DBC.dbconfig.database}.CuboViajes cv 
+            INNER JOIN ${DBC.dbconfig.database}.LK_Vehiculo v ON v.IdVehiculo = cv.IdVehiculo 
+            GROUP BY v.Descipcion 
+            HAVING AVG(MinutosViaje) > 0;`;
             const result = yield this.select(query);
             res.json({
                 status: 200,
