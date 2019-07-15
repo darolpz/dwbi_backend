@@ -35,7 +35,7 @@ class ApiController {
     }
     timeForvehicle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = `SELECT v.Descipcion AS Vehiculo, AVG(MinutosViaje) AS Tiempo 
+            const query = `SELECT v.Descipcion AS vehiculo, AVG(MinutosViaje) AS tiempo 
             FROM ${DBC.dbconfig.database}.CuboViajes cv 
             INNER JOIN ${DBC.dbconfig.database}.LK_Vehiculo v ON v.IdVehiculo = cv.IdVehiculo 
             GROUP BY v.Descipcion 
@@ -52,7 +52,7 @@ class ApiController {
             var workbook = new exceljs_1.Workbook();
             console.log(workbook);
             var sheet = workbook.addWorksheet('Tiempo de viaje'); //creating worksheet
-            var data = yield this.select(`SELECT v.Descipcion AS Vehiculo, AVG(MinutosViaje) AS Tiempo 
+            var data = yield this.select(`SELECT v.Descipcion  AS Vehiculo, AVG(MinutosViaje) AS Tiempo 
             FROM ${DBC.dbconfig.database}.CuboViajes cv 
             INNER JOIN Datawarehouse.LK_Vehiculo v ON v.IdVehiculo = cv.IdVehiculo 
             GROUP BY v.Descipcion 
@@ -80,7 +80,7 @@ class ApiController {
     }
     cantidadPorTurno(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = `SELECT e.Horario, COUNT(*) AS Cantidad FROM ${DBC.dbconfig.database}.CuboViajes cv 
+            const query = `SELECT e.Horario AS horario, COUNT(*) AS cantidad FROM ${DBC.dbconfig.database}.CuboViajes cv 
             INNER JOIN ${DBC.dbconfig.database}.LK_Empleado e ON e.DNI = cv.DNIEmpleado
             GROUP BY e.Horario;`;
             const result = yield this.select(query);
@@ -92,7 +92,7 @@ class ApiController {
     }
     cantidadPorEmpleado(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = `SELECT e.Nombre, e.DNI, COUNT(*) AS Cantidad 
+            const query = `SELECT e.nombre, e.DNI AS dni, COUNT(*) AS cantidad 
             FROM ${DBC.dbconfig.database}.CuboViajes cv
             INNER JOIN ${DBC.dbconfig.database}.LK_Empleado e ON e.DNI = cv.DNIEmpleado
             GROUP BY e.DNI, e.Nombre;`;
