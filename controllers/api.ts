@@ -39,7 +39,7 @@ class ApiController {
         })
     }
 
-    public async generateExcel(req: Request, res: Response){
+    public async generateExceltimeForvehicle(req: Request, res: Response){
         var workbook = new Workbook();
         console.log(workbook);
         var sheet = workbook.addWorksheet('Tiempo de viaje'); //creating worksheet
@@ -74,6 +74,33 @@ class ApiController {
         });
         
     }
+
+    public async cantidadPorTurno(req: Request, res: Response) {
+        const query = 
+            `SELECT e.Horario, COUNT(*) AS Cantidad FROM ${DBC.dbconfig.database}.CuboViajes cv 
+            INNER JOIN ${DBC.dbconfig.database}.LK_Empleado e ON e.DNI = cv.DNIEmpleado
+            GROUP BY e.Horario;`;
+        const result = await this.select(query);
+        res.json({
+            status: 200,
+            result: result,
+        })
+    }
+
+    public async cantidadPorEmpleado(req: Request, res: Response) {
+        const query =
+            `SELECT e.Nombre, e.DNI, COUNT(*) AS Cantidad 
+            FROM ${DBC.dbconfig.database}.CuboViajes cv
+            INNER JOIN ${DBC.dbconfig.database}.LK_Empleado e ON e.DNI = cv.DNIEmpleado
+            GROUP BY e.DNI, e.Nombre;`;
+        const result = await this.select(query);
+        res.json({
+            status: 200,
+            result: result,
+        })
+    }
+
+    
 
     private select(query: string): any[] | any {
         let promise = new Promise((resolve, reject) => {
