@@ -26,12 +26,24 @@ class ApiController {
     }
 
     public async timeForvehicle(req: Request, res: Response) {
+        var desde = req.query.fechaDesde;
+        var hasta = req.query.fechaHasta;
+        var desdeQuery = ``;
+        var hastaQuery = ``;
+        
+        if (desde) desdeQuery = `AND cv.Fecha >= ${desde}`;
+        if (hasta) hastaQuery = `AND cv.Fecha < ${hasta}`;
+        
         const query =
             `SELECT v.Descipcion AS vehiculo, AVG(MinutosViaje) AS tiempo 
             FROM ${DBC.dbconfig.database}.CuboViajes cv 
-            INNER JOIN ${DBC.dbconfig.database}.LK_Vehiculo v ON v.IdVehiculo = cv.IdVehiculo 
+            INNER JOIN ${DBC.dbconfig.database}.LK_Vehiculo v ON v.IdVehiculo = cv.IdVehiculo
+            WHERE 1 = 1 
+            ${desdeQuery} 
+            ${hastaQuery} 
             GROUP BY v.Descipcion 
             HAVING AVG(MinutosViaje) > 0;`;
+
         const result = await this.select(query);
         res.json({
             status: 200,
@@ -41,7 +53,6 @@ class ApiController {
 
     public async generateExceltimeForvehicle(req: Request, res: Response) {
         var workbook = new Workbook();
-        console.log(workbook);
         var sheet = workbook.addWorksheet('Tiempo de viaje'); //creating worksheet
 
         var data: any[] = await this.select(
@@ -76,10 +87,20 @@ class ApiController {
     }
 
     public async cantidadPorTurno(req: Request, res: Response) {
+        var desde = req.query.fechaDesde;
+        var hasta = req.query.fechaHasta;
+        var desdeQuery = ``;
+        var hastaQuery = ``;
+        if (desde) desdeQuery = `AND cv.Fecha >= ${desde}`;
+        if (hasta) hastaQuery = `AND cv.Fecha < ${hasta}`;
+        
         const query =
-            `SELECT e.Horario AS horario, COUNT(*) AS cantidad FROM ${DBC.dbconfig.database}.CuboViajes cv 
+            `SELECT e.Horario AS horario, COUNT(*) AS cantidad 
+            FROM ${DBC.dbconfig.database}.CuboViajes cv 
             INNER JOIN ${DBC.dbconfig.database}.LK_Empleado e ON e.DNI = cv.DNIEmpleado
+            WHERE 1 = 1 ${desdeQuery} ${hastaQuery} 
             GROUP BY e.Horario;`;
+
         const result = await this.select(query);
         res.json({
             status: 200,
@@ -88,10 +109,18 @@ class ApiController {
     }
 
     public async cantidadPorEmpleado(req: Request, res: Response) {
+        var desde = req.query.fechaDesde;
+        var hasta = req.query.fechaHasta;
+        var desdeQuery = ``;
+        var hastaQuery = ``;
+        if (desde) desdeQuery = `AND cv.Fecha >= ${desde}`;
+        if (hasta) hastaQuery = `AND cv.Fecha < ${hasta}`;
+        
         const query =
             `SELECT e.nombre, e.DNI AS dni, COUNT(*) AS cantidad 
             FROM ${DBC.dbconfig.database}.CuboViajes cv
-            INNER JOIN ${DBC.dbconfig.database}.LK_Empleado e ON e.DNI = cv.DNIEmpleado
+            INNER JOIN ${DBC.dbconfig.database}.LK_Empleado e ON e.DNI = cv.DNIEmpleado 
+            WHERE 1 = 1 ${desdeQuery} ${hastaQuery} 
             GROUP BY e.DNI, e.Nombre;`;
         const result = await this.select(query);
         res.json({
