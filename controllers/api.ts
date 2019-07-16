@@ -5,25 +5,6 @@ import moment from 'moment';
 const DBC = require('../dbconfig');
 
 class ApiController {
-    public index(req: Request, res: Response) {
-        /* Post params */
-        const body = req.body;
-        /* Query string params */
-        const query = req.query;
-        res.json({
-            page: 'index',
-        });
-    }
-
-    public home(req: Request, res: Response) {
-        /* Post params */
-        const body = req.body;
-        /* Query string params */
-        const query = req.query;
-        res.json({
-            page: 'home',
-        });
-    }
 
     public async getEmployees(req: Request, res: Response) {
         const query = `SELECT  emp.DNI AS dni, emp.Nombre as nombre,count(*) AS cantidad FROM CuboViajes cv
@@ -46,7 +27,7 @@ class ApiController {
         }
     }
 
-    public async QuantityForEaD(req: Request, res: Response) {
+    public async quantityForEaD(req: Request, res: Response) {
         const body = req.body;
         const employeeId = req.body.employee;
         const year = req.body.year;

@@ -16,24 +16,6 @@ const __1 = __importDefault(require(".."));
 const moment_1 = __importDefault(require("moment"));
 const DBC = require('../dbconfig');
 class ApiController {
-    index(req, res) {
-        /* Post params */
-        const body = req.body;
-        /* Query string params */
-        const query = req.query;
-        res.json({
-            page: 'index',
-        });
-    }
-    home(req, res) {
-        /* Post params */
-        const body = req.body;
-        /* Query string params */
-        const query = req.query;
-        res.json({
-            page: 'home',
-        });
-    }
     getEmployees(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = `SELECT  emp.DNI AS dni, emp.Nombre as nombre,count(*) AS cantidad FROM CuboViajes cv
@@ -56,7 +38,7 @@ class ApiController {
             }
         });
     }
-    QuantityForEaD(req, res) {
+    quantityForEaD(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const body = req.body;
             const employeeId = req.body.employee;
