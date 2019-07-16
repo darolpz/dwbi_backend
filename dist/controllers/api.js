@@ -196,6 +196,35 @@ class ApiController {
             });
         });
     }
+    generateExcelcantidadPorEmpleado(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var workbook = new exceljs_1.Workbook();
+            var sheet = workbook.addWorksheet('Cantidad por empleado'); //creating worksheet
+            var data = yield this.select(`SELECT e.nombre, e.DNI AS dni, COUNT(*) AS cantidad 
+            FROM ${DBC.dbconfig.database}.CuboViajes cv
+            INNER JOIN ${DBC.dbconfig.database}.LK_Empleado e ON e.DNI = cv.DNIEmpleado 
+            GROUP BY e.DNI, e.Nombre;`);
+            var encabezados = ['Empleado', 'Cantidad'];
+            sheet.addRow(encabezados);
+            data.forEach(x => {
+                sheet.addRow([x.nombre, x.cantidad]);
+            });
+            var tempfile = require('tempfile');
+            var tempFilePath = tempfile('.xlsx');
+            console.log("tempFilePath : ", { root: '/tmp/' }, tempFilePath);
+            workbook.xlsx.writeFile(tempFilePath).then(function () {
+                res.sendFile(tempFilePath, function (err) {
+                    if (!!err) {
+                        console.log('---------- error downloading file: ', err);
+                        res.status(500).end();
+                    }
+                    else {
+                        console.log("Todo OK");
+                    }
+                });
+            });
+        });
+    }
     select(query) {
         let promise = new Promise((resolve, reject) => {
             __1.default.query(query, (err, result) => {
