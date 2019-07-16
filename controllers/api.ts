@@ -190,6 +190,40 @@ class ApiController {
         })
     }
 
+    public async generateExcelcantidadPorEmpleado(req: Request, res: Response) {
+        var workbook = new Workbook();
+        var sheet = workbook.addWorksheet('Cantidad por empleado'); //creating worksheet
+
+        var data: any[] = await this.select(
+            `SELECT e.nombre, e.DNI AS dni, COUNT(*) AS cantidad 
+            FROM ${DBC.dbconfig.database}.CuboViajes cv
+            INNER JOIN ${DBC.dbconfig.database}.LK_Empleado e ON e.DNI = cv.DNIEmpleado 
+            GROUP BY e.DNI, e.Nombre;`);
+        var encabezados = ['Empleado', 'Cantidad'];
+        sheet.addRow(encabezados);
+
+        data.forEach(x => {
+            sheet.addRow([x.nombre, x.cantidad]);
+        });
+
+        var tempfile = require('tempfile');
+        var tempFilePath = tempfile('.xlsx');
+
+        console.log("tempFilePath : ", { root: '/tmp/' }, tempFilePath);
+        workbook.xlsx.writeFile(tempFilePath).then(function () {
+            res.sendFile(tempFilePath, function (err) {
+                if (!!err) {
+                    console.log('---------- error downloading file: ', err);
+                    res.status(500).end();
+                }
+                else {
+                    console.log("Todo OK");
+                }
+            });
+        });
+
+    }
+
 
 
     private select(query: string): any[] | any {
