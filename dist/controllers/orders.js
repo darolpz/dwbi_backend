@@ -181,6 +181,27 @@ class OrdersController {
             });
         });
     }
+    annualAmount(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const year = req.body.year;
+            let initDate = moment_1.default().year(year).startOf('year');
+            const endDate = moment_1.default().year(year).endOf('year');
+            const finalResult = [];
+            while (initDate <= endDate) {
+                let endMonth = moment_1.default(initDate.format('YYYY-MM-DD')).endOf('month');
+                const query = `SELECT SUM(amount) AS cantidad FROM BT_orders ord
+            WHERE ord.date >= '${initDate.format('YYYY-MM-DD')}' AND ord.date <= '${endMonth.format('YYYY-MM-DD')}';`;
+                const result = yield this.select(query);
+                const cantidad = result[0].cantidad != null ? result[0].cantidad : 0;
+                finalResult.push(cantidad);
+                initDate.add(1, 'month');
+            }
+            res.json({
+                status: 200,
+                result: finalResult,
+            });
+        });
+    }
     amountForFood(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const foodId = req.body.food;

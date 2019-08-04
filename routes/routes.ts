@@ -24,6 +24,7 @@ routes.route('/quantityForFood').post(orderCtrl.quantityForFood.bind(orderCtrl))
 routes.route('/amountForFood').post(orderCtrl.amountForFood.bind(orderCtrl));
 routes.route('/amountFoodsForCompany').post(orderCtrl.amountFoodsForCompany.bind(orderCtrl));
 routes.route('/quantityByCompany').post(orderCtrl.quantityByCompany.bind(orderCtrl));
+routes.route('/annualAmount').post(orderCtrl.annualAmount.bind(orderCtrl));
 
 export default routes;
 

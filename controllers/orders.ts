@@ -168,6 +168,27 @@ class OrdersController {
         })
     }
 
+    public async annualAmount(req: Request, res: Response) {
+        const year = req.body.year;
+        let initDate = moment().year(year).startOf('year');
+        const endDate = moment().year(year).endOf('year');
+        const finalResult: Array<any> = [];
+        while (initDate <= endDate) {
+            let endMonth = moment(initDate.format('YYYY-MM-DD')).endOf('month');
+            const query = `SELECT SUM(amount) AS cantidad FROM BT_orders ord
+            WHERE ord.date >= '${initDate.format('YYYY-MM-DD')}' AND ord.date <= '${endMonth.format('YYYY-MM-DD')}';`;
+            const result = await this.select(query);
+            const cantidad = result[0].cantidad != null ? result[0].cantidad : 0;
+            finalResult.push(cantidad);
+            initDate.add(1, 'month');
+        }
+
+        res.json({
+            status: 200,
+            result: finalResult,
+        })
+    }
+
     public async amountForFood(req: Request, res: Response) {
         const foodId = req.body.food;
         const typeFood = req.body.type;
