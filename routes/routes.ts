@@ -7,6 +7,8 @@ const routes = Router();
 const apiCtrl: ApiController = new ApiController();
 const orderCtrl: OrdersController = new OrdersController();
 
+routes.route('/').get(apiCtrl.getIndex.bind(apiCtrl));
+
 routes.route('/getEmployees').get(apiCtrl.getEmployees.bind(apiCtrl));
 routes.route('/timeForvehicle').post(apiCtrl.timeForvehicle.bind(apiCtrl));
 routes.route('/timeForvehicle-download').get(apiCtrl.generateExceltimeForvehicle.bind(apiCtrl));

@@ -27,6 +27,13 @@ class ApiController {
         }
     }
 
+    public async getIndex(req: Request, res: Response) {
+        res.json({
+            status: 200,
+            message: 'Hola mundo',
+        })
+    }
+
     public async quantityForEaD(req: Request, res: Response) {
         const body = req.body;
         const employeeId = req.body.employee;
